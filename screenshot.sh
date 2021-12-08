@@ -14,7 +14,7 @@ error() {
 full_path="$screenshot_path/$screenshot_name"
 [[ "$1" == "window" ]] && import -window root "$full_path" || import "$full_path"
 
-[[ "$1" == "local" ]] && notify-send "Screenshot saved!"; exit 0
+#[[ "$1" == "local" ]] && notify-send "Screenshot saved!"; exit 0
 
 data=$(curl -s -X "POST" -F "file=@$full_path" "$upload_url")
 
