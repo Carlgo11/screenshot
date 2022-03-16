@@ -1,0 +1,6 @@
+{
+  "upload url": "https://api.tempfiles.download/upload/",
+  "local path": "~/Pictures/Screenshots",
+  "notify": true,
+  "copy": true
+}

@@ -2,7 +2,6 @@
 Screenshot script for Plasma Wayland (KDE)
 
 ## Requirements
-* cURL
-* Plasma Wayland
-* KDE
+* KDE (notifications)
 * ImageMagick (import command)
+* xclip (clipboard integration)
