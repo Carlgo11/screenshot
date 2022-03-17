@@ -23,7 +23,7 @@ module Settings
   end
 
   def self.download
-    url = URI('https://tempfiles.download/settings.json')
+    url = URI('https://tempfiles.download/linux_client.json')
     http = Net::HTTP.new(url.host, url.port)
     http.use_ssl = true
     response = http.request(Net::HTTP::Get.new(url))
