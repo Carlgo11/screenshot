@@ -1,5 +1,5 @@
-# Screenshot Linux script
-Screenshot script for Plasma Wayland (KDE)
+# TempFiles Linux Client
+Screenshot and File uploading program for KDE Plasma
 
 ## Requirements
 * KDE (notifications)
