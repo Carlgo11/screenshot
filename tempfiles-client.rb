@@ -10,14 +10,11 @@ require 'tempfile'
 
 module Settings
   @settings = nil
+  @path = "#{Dir.home}/.config/TempFiles/settings.json"
 
   def self.load
-    path = 'settings.json'
-    dir = File.dirname(path)
-    unless File.directory?(dir)
-      FileUtils.mkdir_p(dir)
-    end
-    file = JSON.parse(File.read(path))
+    Settings.download unless File.exists? @path
+    file = JSON.parse(File.read(@path))
     @settings = file
   end
 
@@ -26,7 +23,20 @@ module Settings
   end
 
   def self.download
-
+    url = URI('https://tempfiles.download/settings.json')
+    http = Net::HTTP.new(url.host, url.port)
+    http.use_ssl = true
+    response = http.request(Net::HTTP::Get.new(url))
+    raise 'Unable to download settings' unless response.code == '200'
+    begin
+    json = JSON.parse(response.body)
+    rescue JSON::ParseException => e
+      raise 'Downloaded settings contain errors'
+    end
+    Dir.mkdir(File.dirname(@path)) unless Dir.exists? File.dirname(@path)
+    File.open(@path, 'w') do |f|
+      f.write(JSON.pretty_generate(json))
+    end
   end
 end
 
@@ -59,6 +69,10 @@ def notify(msg, path)
   `notify-send TempFiles "#{msg}" -i #{path}`
 end
 
+###
+# Parse arguments
+###
+
 ARGV << '-h' if ARGV.empty?
 @options = {}
 OptionParser.new do |opts|
@@ -76,6 +90,10 @@ OptionParser.new do |opts|
 end.parse!
 raise OptionParser::MissingArgument if (@options.key?(:windowed) && @options[:screenshot].nil?)
 
+###
+# Run program
+###
+
 Settings.load
 
 if @options.key? :screenshot
@@ -92,4 +110,3 @@ if @options.key? :upload
   notify('Uploaded!', path) if Settings.get 'notify'
   Clipboard.copy url if Settings.get 'copy'
 end
-
